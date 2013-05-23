@@ -1,0 +1,11 @@
+name: VVCdB
+main: fr.vaevictis.vvcdb.VVCdB
+author: NiCoLaS4658
+version: 0.1
+
+commands:
+  command:
+    description:
+    usage: /<command>
+    permission:
+    permission-message:
