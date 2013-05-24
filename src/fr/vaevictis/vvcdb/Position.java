@@ -12,6 +12,7 @@ public class Position
 		this.champdebataille = cdb.getNom();
 		this.faction = "";
 		this.timer = -1;
+		this.factiontaking = "";
 	}
 
 	public Location getLocation()
@@ -38,10 +39,19 @@ public class Position
 	{
 		this.faction = f;
 	}
+	public String getFactiontaking()
+	{
+		return this.factiontaking;
+	}
+	public void setFactionTaking(String ft)
+	{
+		this.factiontaking = ft;
+	}
 	private String champdebataille;
 	private Location location;
 	private boolean couverte;
 	private String faction;
+	private String factiontaking;
 	private String nom;
 	public byte timer;
 }

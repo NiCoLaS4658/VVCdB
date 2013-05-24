@@ -3,9 +3,11 @@ package fr.vaevictis.vvcdb;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.massivecraft.factions.FPlayer;
@@ -36,9 +38,25 @@ public class VVCdBListener implements Listener
 			{
 				if (e.getTo().distance(p.getLocation()) <= 5)
 				{
-					Bukkit.getServer().getScheduler().runTaskTimer(this.plugin, new TimerTaskTakeZone(p, FPlayers.i.get(e.getPlayer()).getFaction().getId()), 20, 20);
+					if (p.getFactiontaking() == "")
+					{
+						Bukkit.getServer().broadcastMessage(ChatColor.DARK_RED + "[Champ de bataille] La faction " + FPlayers.i.get(e.getPlayer()).getFaction().getTag() + " tente de prendre la position " + p.getNom() + ".");
+						p.setFactionTaking(FPlayers.i.get(e.getPlayer()).getFaction().getId());
+						Bukkit.getServer().getScheduler().runTaskTimer(this.plugin, new TimerTaskTakeZone(p, FPlayers.i.get(e.getPlayer()).getFaction().getId()), 20, 20);
+					}
 				}
 			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerDying(PlayerDeathEvent e)
+	{
+		if (ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getJoueurs().contains(e.getEntity()))
+		{
+			e.getDrops().clear();
+			
+			VVCdB.equipPlayerArmor(e.getEntity());
 		}
 	}
 }

@@ -28,29 +28,36 @@ public class TimerTaskTakeZone extends BukkitRunnable
 	@Override
 	public void run()
 	{
-		for (Player player : ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getJoueurs())
+		if (position.getFactiontaking() == this.factionid)
 		{
-			if (FPlayers.i.get(player).getFactionId() == factionid)
+			for (Player player : ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getJoueurs())
 			{
-				if (player.getLocation().distance(position.getLocation()) <= 5)
+				if (FPlayers.i.get(player).getFactionId() == this.factionid)
 				{
-					if (position.timer == -1)
+					if (player.getLocation().distance(position.getLocation()) <= 5)
 					{
-						position.timer = (byte) (position.isCouverte() ? 1 : 2);
+						if (position.timer == -1)
+						{
+							position.timer = (byte) (position.isCouverte() ? 1 : 2);
+						}
+						else
+						{
+							position.timer += (byte) (position.isCouverte() ? 1 : 2);
+						}
+						if (position.timer == 40)
+						{
+							position.timer = -1;
+							position.setFaction(this.factionid);
+							Bukkit.getServer().broadcastMessage(ChatColor.DARK_RED + "[Champ de Bataille] La position " + position.getNom() + " a été pris par " + Factions.i.get(position.getFaction()).getTag() + ".");
+							this.cancel();
+						}
+						return;
 					}
-					else
-					{
-						position.timer += (byte) (position.isCouverte() ? 1 : 2);
-					}
-					if (position.timer == 40)
-					{
-						position.timer = -1;
-						position.setFaction(this.factionid);
-						Bukkit.getServer().broadcastMessage(ChatColor.DARK_RED + "[Champ de Bataille] La position " + position.getNom() + " a été pris par " + Factions.i.get(position.getFaction()).getTag() + ".");
-						this.cancel();
-					}
-					return;
 				}
+				position.timer = -1;
+				Bukkit.getServer().broadcastMessage(ChatColor.DARK_RED + "[Champ de Bataille] La prise de la position " + position.getNom() + " a échoué.");
+				position.setFactionTaking("");
+				this.cancel();
 			}
 		}
 	}
