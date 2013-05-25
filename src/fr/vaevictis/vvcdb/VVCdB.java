@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,8 +44,29 @@ public class VVCdB extends JavaPlugin
 		switch (getArmure(p))
 		{
 			case "basic":
+				p.getInventory().setHelmet(new ItemStack(596));
+				p.getInventory().setChestplate(new ItemStack(597));
+				p.getInventory().setLeggings(new ItemStack(598));
+				p.getInventory().setBoots(new ItemStack(599));
+				p.getInventory().addItem(new ItemStack(267));
+				ItemStack bowb = new ItemStack(261);
+				bowb.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+				p.getInventory().addItem(bowb);
+				p.getInventory().addItem(new ItemStack(262));
+				p.getInventory().addItem(new ItemStack(364, 5));
 				break;
 			case "ahmosis1":
+				p.getInventory().setHelmet(new ItemStack(600));
+				p.getInventory().setChestplate(new ItemStack(601));
+				p.getInventory().setLeggings(new ItemStack(602));
+				p.getInventory().setBoots(new ItemStack(603));
+				p.getInventory().addItem(new ItemStack(276));
+				ItemStack bowa1 = new ItemStack(261);
+				bowa1.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+				bowa1.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
+				p.getInventory().addItem(bowa1);
+				p.getInventory().addItem(new ItemStack(262));
+				p.getInventory().addItem(new ItemStack(364, 5));
 				break;
 			case "ahmosis2":
 				break;
