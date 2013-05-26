@@ -1,7 +1,7 @@
 package fr.vaevictis.vvcdb;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -46,7 +46,7 @@ public class ChampDeBataille
 	{
 		this.defaultSpawn = l;
 	}
-	public List<Player> getJoueurs()
+	public ArrayList<Player> getJoueurs()
 	{
 		return this.joueurs;
 	}
@@ -104,7 +104,7 @@ public class ChampDeBataille
 		cdbstarted = true;
 		Bukkit.getServer().getScheduler().runTaskTimer(Bukkit.getServer().getPluginManager().getPlugin("VVCdB"), new TimerTaskGainPoints(), 400, 400);
 	}
-	public List getPositions()
+	public ArrayList<Position> getPositions()
 	{
 		return this.positions;
 	}
@@ -160,15 +160,15 @@ public class ChampDeBataille
 		}
 	}
 	public int pointsToGet;
-	private List<Location> spawns;
+	private ArrayList<Location> spawns;
 	private Location defaultSpawn;
-	private List<Player> joueurs;
-	private List<Player> playerwholeft;
-	private List<Location> locationsjoueurs;
-	private List<PlayerInventory> inventairesjoueurs;
-	private List<Position> positions;
+	private ArrayList<Player> joueurs;
+	private ArrayList<Player> playerwholeft;
+	private ArrayList<Location> locationsjoueurs;
+	private ArrayList<PlayerInventory> inventairesjoueurs;
+	private ArrayList<Position> positions;
 	private String nom;
-	public static Map<String, ChampDeBataille> champsdebataille;
+	public static HashMap<String, ChampDeBataille> champsdebataille;
 	public static String usedCdB;
 	public static boolean cdbstarted;
 }

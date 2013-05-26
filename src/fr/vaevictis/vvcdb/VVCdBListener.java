@@ -1,6 +1,6 @@
 package fr.vaevictis.vvcdb;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,7 +25,7 @@ public class VVCdBListener implements Listener
 		this.plugin = plugin;
 	}
 	
-	public List<Position> getPositions()
+	public ArrayList<Position> getPositions()
 	{
 		return ChampDeBataille.getMap(ChampDeBataille.usedCdB).getPositions();
 	}

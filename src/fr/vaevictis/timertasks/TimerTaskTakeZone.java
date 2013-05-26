@@ -48,6 +48,7 @@ public class TimerTaskTakeZone extends BukkitRunnable
 						{
 							position.timer = -1;
 							position.setFaction(this.factionid);
+							position.setFactionTaking("");
 							Bukkit.getServer().broadcastMessage(ChatColor.DARK_RED + "[Champ de Bataille] La position " + position.getNom() + " a été pris par " + Factions.i.get(position.getFaction()).getTag() + ".");
 							this.cancel();
 						}
