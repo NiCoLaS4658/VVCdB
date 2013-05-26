@@ -30,7 +30,7 @@ public class TimerTaskTakeZone extends BukkitRunnable
 	{
 		if (position.getFactiontaking() == this.factionid)
 		{
-			for (Player player : ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getJoueurs())
+			for (Player player : ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs())
 			{
 				if (FPlayers.i.get(player).getFactionId() == this.factionid)
 				{

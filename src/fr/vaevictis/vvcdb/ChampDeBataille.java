@@ -11,12 +11,15 @@ import org.bukkit.util.Vector;
 
 import com.massivecraft.factions.FPlayers;
 
+import fr.vaevictis.timertasks.TimerTaskGainPoints;
+
 public class ChampDeBataille 
 {
 	public ChampDeBataille(String nom)
 	{
 		this.nom = nom.toLowerCase();
 		this.ajouterMap();
+		this.pointsToGet = 50;
 	}
 	public void ajouterMap()
 	{
@@ -28,7 +31,7 @@ public class ChampDeBataille
 	}
 	public static ChampDeBataille getMap(String key)
 	{
-		return champsdebataille.get(key);
+		return getMap(key);
 	}
 	
 	public String getNom()
@@ -53,6 +56,20 @@ public class ChampDeBataille
 		locationsjoueurs.add(p.getLocation());
 		inventairesjoueurs.add(p.getInventory());
 		VVCdB.equipPlayerArmor(p);
+		boolean lancer = false;
+		for (Player p2 : joueurs)
+		{
+			if (FPlayers.i.get(p).getFaction().getId() != FPlayers.i.get(p2).getFaction().getId())
+			{
+				lancer = true;
+			}
+		}
+		if (lancer == true && cdbstarted == false)
+		{
+			lancerAttaque();
+		}
+		playerwholeft.remove(p);
+		pointsToGet = 50 + 5 * (joueurs.size() + playerwholeft.size());
 	}
 	public void playerLeave(Player p)
 	{
@@ -60,12 +77,15 @@ public class ChampDeBataille
 		p.getInventory().setArmorContents(inventairesjoueurs.get(joueurs.lastIndexOf(p)).getArmorContents());
 		p.getInventory().setContents(inventairesjoueurs.get(joueurs.lastIndexOf(p)).getContents());
 		p.teleport(locationsjoueurs.get(joueurs.lastIndexOf(p)));
-		joueurs.remove(joueurs.lastIndexOf(p));
+		joueurs.remove(p);
+		playerwholeft.add(p);
 	}
 	public static void arret()
 	{
-		ChampDeBataille cdb = champsdebataille.get(usedCdB);
+		ChampDeBataille cdb = getMap(usedCdB);
 		usedCdB = "";
+		cdbstarted = false;
+		cdb.pointsToGet = 50;
 		for (Position p : cdb.positions)
 		{
 			p.setFaction("");
@@ -76,11 +96,13 @@ public class ChampDeBataille
 		{
 			cdb.playerLeave(p);
 		}
+		cdb.playerwholeft.clear();
 	}
-	public static void lancerAttaque(String factionid)
+	public static void lancerAttaque()
 	{
-		usedCdB = factionid.toLowerCase();
-		ChampDeBataille cdb = champsdebataille.get(usedCdB);
+		ChampDeBataille cdb = getMap(usedCdB);
+		cdbstarted = true;
+		Bukkit.getServer().getScheduler().runTaskTimer(Bukkit.getServer().getPluginManager().getPlugin("VVCdB"), new TimerTaskGainPoints(), 400, 400);
 	}
 	public List getPositions()
 	{
@@ -97,49 +119,56 @@ public class ChampDeBataille
 			}
 		}
 		int i = (int) Math.random() * nombrepos;
+		int nombreposbis = nombrepos;
 		nombrepos = 0;
-		for (Position pos : positions)
+		if (nombreposbis !=0)
 		{
-			if (pos.getFaction() == FPlayers.i.get(p).getFaction().getId())
+			for (Position pos : positions)
 			{
-				nombrepos++;
-			}
-			if (nombrepos == i)
-			{
-				int direction = (int) Math.random() * 4;
-				int x = (int) (Math.random() * 20);
-				Location l = new Location(Bukkit.getWorld("world"), 0D, 0D, 0D);
-				if (direction == 0)
+				if (pos.getFaction() == FPlayers.i.get(p).getFaction().getId())
 				{
-					l = pos.getLocation().add(new Vector(x, 0, Math.sqrt(400 - Math.pow((double) x, 2))));
+					nombrepos++;
 				}
-				else if (direction == 1)
+				if (nombrepos == i)
 				{
-					l = pos.getLocation().add(new Vector(-x, 0, Math.sqrt(400 - Math.pow((double) x, 2))));
+					int direction = (int) (Math.random() * 4);
+					int x = (int) (Math.random() * 20);
+					Location l = new Location(Bukkit.getWorld("world"), 0D, 0D, 0D);
+					if (direction == 0)
+					{
+						l = pos.getLocation().add(new Vector(x, 0, Math.sqrt(400 - Math.pow((double) x, 2))));
+					}
+					else if (direction == 1)
+					{
+						l = pos.getLocation().add(new Vector(-x, 0, Math.sqrt(400 - Math.pow((double) x, 2))));
+					}
+					else if (direction == 2)
+					{
+						l = pos.getLocation().add(new Vector(x, 0, -Math.sqrt(400 - Math.pow((double) x, 2))));
+					}
+					else if (direction == 3)
+					{
+						l = pos.getLocation().add(new Vector(-x, 0, -Math.sqrt(400 - Math.pow((double) x, 2))));
+					}
+					p.teleport(l);
 				}
-				else if (direction == 2)
-				{
-					l = pos.getLocation().add(new Vector(x, 0, -Math.sqrt(400 - Math.pow((double) x, 2))));
-				}
-				else if (direction == 3)
-				{
-					l = pos.getLocation().add(new Vector(-x, 0, -Math.sqrt(400 - Math.pow((double) x, 2))));
-				}
-				p.teleport(l);
 			}
 		}
-		if (nombrepos == 0)
+		else if (nombrepos == 0)
 		{
-			// Creer un spawn si aucun point !
+			p.teleport(spawns.get( (int) (Math.random() * this.spawns.size())));
 		}
 	}
+	public int pointsToGet;
+	private List<Location> spawns;
 	private Location defaultSpawn;
 	private List<Player> joueurs;
+	private List<Player> playerwholeft;
 	private List<Location> locationsjoueurs;
 	private List<PlayerInventory> inventairesjoueurs;
 	private List<Position> positions;
 	private String nom;
 	public static Map<String, ChampDeBataille> champsdebataille;
 	public static String usedCdB;
-
+	public static boolean cdbstarted;
 }

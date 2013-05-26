@@ -27,7 +27,7 @@ public class VVCdBListener implements Listener
 	
 	public List<Position> getPositions()
 	{
-		return ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getPositions();
+		return ChampDeBataille.getMap(ChampDeBataille.usedCdB).getPositions();
 	}
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMoving(PlayerMoveEvent e)
@@ -52,7 +52,7 @@ public class VVCdBListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerDying(PlayerDeathEvent e)
 	{
-		if (ChampDeBataille.champsdebataille.get(ChampDeBataille.usedCdB).getJoueurs().contains(e.getEntity()))
+		if (ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs().contains(e.getEntity()))
 		{
 			e.getDrops().clear();
 			
