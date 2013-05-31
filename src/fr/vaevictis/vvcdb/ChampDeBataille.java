@@ -68,6 +68,7 @@ public class ChampDeBataille
 		{
 			lancerAttaque();
 		}
+		p.teleport(defaultSpawn);
 		playerwholeft.remove(p);
 		pointsToGet = 50 + 5 * (joueurs.size() + playerwholeft.size());
 	}
@@ -82,6 +83,10 @@ public class ChampDeBataille
 	}
 	public static void arret()
 	{
+		for (VVFaction f : VVFaction.factions)
+		{
+			f.setPoints(0);
+		}
 		ChampDeBataille cdb = getMap(usedCdB);
 		usedCdB = "";
 		cdbstarted = false;
@@ -100,6 +105,10 @@ public class ChampDeBataille
 	}
 	public static void lancerAttaque()
 	{
+		for (VVFaction f : VVFaction.factions)
+		{
+			f.setPoints(0);
+		}
 		ChampDeBataille cdb = getMap(usedCdB);
 		cdbstarted = true;
 		Bukkit.getServer().getScheduler().runTaskTimer(Bukkit.getServer().getPluginManager().getPlugin("VVCdB"), new TimerTaskGainPoints(), 400, 400);
@@ -158,6 +167,10 @@ public class ChampDeBataille
 		{
 			p.teleport(spawns.get( (int) (Math.random() * this.spawns.size())));
 		}
+	}
+	public ArrayList<Location> getSpawns()
+	{
+		return spawns;
 	}
 	public int pointsToGet;
 	private ArrayList<Location> spawns;

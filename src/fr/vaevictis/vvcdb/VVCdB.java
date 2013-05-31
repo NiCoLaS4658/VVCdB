@@ -19,7 +19,11 @@ public class VVCdB extends JavaPlugin
 	{
 		ChampDeBataille.usedCdB = "";
 		ChampDeBataille.cdbstarted = false;
-		// Chargement
+		FileConfiguration config = this.getConfig();
+		for (ChampDeBataille cdb : ChampDeBataille.champsdebataille.values())
+		{
+			config.set("champsdebataille."+cdb.getNom(), cdb);
+		}
 	}
 	
 	@Override
@@ -39,6 +43,7 @@ public class VVCdB extends JavaPlugin
 		String armorpath = "armures." + p.getName();
 		FileConfiguration config = Bukkit.getServer().getPluginManager().getPlugin("VVCdB").getConfig();
 		config.set(armorpath, s);
+		Bukkit.getServer().getPluginManager().getPlugin("VVCdB").saveConfig();
 	}
 	public static void equipPlayerArmor(Player p)
 	{
@@ -180,22 +185,24 @@ public class VVCdB extends JavaPlugin
 			}
 			return true;
 		}
-		else if (label.equalsIgnoreCase("cdbcreate"))
+		else if (label.equalsIgnoreCase("cdbcreate") && args.length == 1 && p.hasPermission("vvcdb.admin"))
 		{
+			new ChampDeBataille(args[0]);
 			return true;
 		}
-		else if (label.equalsIgnoreCase("cdbaddposition"))
+		else if (label.equalsIgnoreCase("cdbaddposition") && args.length == 3 && p.hasPermission("vvcdb.admin"))
 		{
+			ChampDeBataille.getMap(args[0]).getPositions().add(new Position(p.getLocation(), (args[1] == "couverte"), args[2], ChampDeBataille.getMap(args[0])));
 			return true;
 		}
-		else if (label.equalsIgnoreCase("cdbsetdefaultspawn"))
+		else if (label.equalsIgnoreCase("cdbsetdefaultspawn") && args.length == 1 && p.hasPermission("vvcdb.admin"))
 		{
-			
+			ChampDeBataille.getMap(args[0]).setDefaultSpawn(p.getLocation());
 			return true;
 		}
-		else if (label.equalsIgnoreCase("cdbaddspawn"))
+		else if (label.equalsIgnoreCase("cdbaddspawn") && args.length == 1 && p.hasPermission("vvcdb.admin"))
 		{
-			
+			ChampDeBataille.getMap(args[0]).getSpawns().add(p.getLocation());
 			return true;
 		}
 		else if (label.equalsIgnoreCase("cdbleave") && args.length == 0 && p.hasPermission("vvcdb.basic"))
@@ -211,7 +218,7 @@ public class VVCdB extends JavaPlugin
 		{
 			if (args[0].equalsIgnoreCase("légère") || args[0].equalsIgnoreCase("legere") || args[0].equalsIgnoreCase("1"))
 			{
-				switch (FPlayers.i.get(p).getFaction().getTag())
+				switch (FPlayers.i.get(p).getFaction().getTag().toLowerCase())
 				{
 					case "Ahmosis":
 						setArmure(p, "ahmosis1");

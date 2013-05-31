@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -58,5 +59,11 @@ public class VVCdBListener implements Listener
 			
 			VVCdB.equipPlayerArmor(e.getEntity());
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerDisconnecting(PlayerQuitEvent e)
+	{
+		ChampDeBataille.getMap(ChampDeBataille.usedCdB).playerLeave(e.getPlayer());
 	}
 }
