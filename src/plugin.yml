@@ -1,11 +1,41 @@
 name: VVCdB
 main: fr.vaevictis.vvcdb.VVCdB
 author: NiCoLaS4658
-version: 0.1
+version: 0.2
 
 commands:
-  command:
-    description:
+  cdbjoin:
+    description: Fait rejoindre le champ de bataille.
+    usage: /<command> [Champ de bataille]
+    permission: vvcdb.basic
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  cdbcreate:
+    description: Cree un champ de bataille.
+    usage: /<command> <Nom>
+    permission: vvcdb.admin
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  cdbaddposition:
+    description: Ajoute une position la ou se trouve le joueur executant la commande.
+    usage: /<command> <Nom du champ de bataille> <Couverte> <Nom de la position>
+    permission: vvcdb.admin
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  cdbsetdefaultspawn:
+    description: Met le spawn principal la ou se trouve le joueur executant la commande.
+    usage: /<command> <Nom du champ de bataille>
+    permission: vvcdb.admin
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  cdbaddspawn:
+    description: Ajoute un spawn la ou se trouve le joueur executant la commande.
+    usage: /<command> <Nom du champ de bataille>
+    permission: vvcdb.admin
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  cdbleave:
+    description: Fait quitter le champ de bataille.
     usage: /<command>
-    permission:
-    permission-message:
+    permission: vvcdb.basic
+    permission-message: Vous n'avez pas la permission de faire ceci !
+  acheterarmure:
+    description: Achete un equipement pour le prochain combat.
+    usage: /<command> <Niveau>
+    permission: vvcdb.basic
+    permission-message: Vous n'avez pas la permission de faire ceci !

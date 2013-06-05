@@ -30,6 +30,10 @@ public class TimerTaskTakeZone extends BukkitRunnable
 	{
 		if (position.getFactiontaking() == this.factionid)
 		{
+			if (ChampDeBataille.usedCdB == "")
+			{
+				this.cancel();
+			}
 			for (Player player : ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs())
 			{
 				if (FPlayers.i.get(player).getFactionId() == this.factionid)

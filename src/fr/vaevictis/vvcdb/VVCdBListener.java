@@ -56,7 +56,6 @@ public class VVCdBListener implements Listener
 		if (ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs().contains(e.getEntity()))
 		{
 			e.getDrops().clear();
-			
 			VVCdB.equipPlayerArmor(e.getEntity());
 		}
 	}

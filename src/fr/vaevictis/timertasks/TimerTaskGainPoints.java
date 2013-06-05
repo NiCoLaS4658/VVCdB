@@ -39,6 +39,10 @@ public class TimerTaskGainPoints extends BukkitRunnable
 						}
 					}
 					config.set(VVFaction.get(pos.getFaction().toLowerCase()).getSaisonPointsPath(), config.getInt(VVFaction.get(pos.getFaction().toLowerCase()).getSaisonPointsPath()) + (int) (0.5 + Math.pow(1.3D, joueurs)));
+					if (config.getInt(VVFaction.get(pos.getFaction().toLowerCase()).getSaisonPointsPath()) >= 50)
+					{
+						// La faction a gagné : Prévoir la récompense !
+					}
 					Bukkit.getServer().getPluginManager().getPlugin("VVCdB").saveConfig();
 					ChampDeBataille.getMap(ChampDeBataille.usedCdB).arret();
 					this.cancel();

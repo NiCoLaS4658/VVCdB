@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
@@ -99,7 +100,12 @@ public class ChampDeBataille
 		}
 		for (Player p : cdb.joueurs)
 		{
+			VVCdB.setArmure(p, "");
 			cdb.playerLeave(p);
+		}
+		for (Player p : cdb.playerwholeft)
+		{
+			VVCdB.setArmure(p, "");
 		}
 		cdb.playerwholeft.clear();
 	}
@@ -184,4 +190,53 @@ public class ChampDeBataille
 	public static HashMap<String, ChampDeBataille> champsdebataille;
 	public static String usedCdB;
 	public static boolean cdbstarted;
+	
+	public void save(VVCdB plugin, int numero)
+	{
+		FileConfiguration config = plugin.getConfig();
+		config.set("champsdebataille." + numero, this.nom);
+		config.set("champsdebataille." + numero + ".defaultspawn.X", this.defaultSpawn.getBlockX());
+		config.set("champsdebataille." + numero + ".defaultspawn.Y", this.defaultSpawn.getBlockY());
+		config.set("champsdebataille." + numero + ".defaultspawn.Z", this.defaultSpawn.getBlockZ());
+		config.set("champsdebataille." + numero + ".defaultspawn.world", this.defaultSpawn.getWorld().getName());
+		
+		config.set("champsdebataille." + numero + ".positions", this.positions.size());
+		int positionsnb = 0;
+		for (Position p : this.positions)
+		{
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb), p.getNom());
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb) + ".location.X", p.getLocation().getBlockX());
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb) + ".location.Y", p.getLocation().getBlockY());
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb) + ".location.Z", p.getLocation().getBlockZ());
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb) + ".location.world", p.getLocation().getWorld().getName());
+			config.set("champsdebataille." + numero + ".positions." + String.valueOf(positionsnb) + ".couverte", p.isCouverte());
+			positionsnb++;
+		}
+		
+		config.set("champsdebataille." + numero + ".spawns", this.spawns.size());
+		int spawnsnb = 0;
+		for (Location l : spawns)
+		{
+			config.set("champsdebataille." + numero + ".spawns." + String.valueOf(spawnsnb) + ".X", l.getBlockX());
+			config.set("champsdebataille." + numero + ".spawns." + String.valueOf(spawnsnb) + ".Y", l.getBlockY());
+			config.set("champsdebataille." + numero + ".spawns." + String.valueOf(spawnsnb) + ".Z", l.getBlockZ());
+			config.set("champsdebataille." + numero + ".spawns." + String.valueOf(spawnsnb) + ".world", l.getWorld().getName());
+			spawnsnb++;
+		}
+		plugin.saveConfig();
+	}
+	public static void saveAll(VVCdB plugin)
+	{
+		FileConfiguration config = plugin.getConfig();
+		config.set("champsdebataille", champsdebataille.size());
+		int champsdebataillenb = 0;
+		for (ChampDeBataille cdb : champsdebataille.values())
+		{
+			config.set("champsdebataille." + String.valueOf(champsdebataillenb), cdb.nom);
+			cdb.save(plugin, champsdebataillenb);
+			champsdebataillenb++;
+		}
+		plugin.saveConfig();		
+	}
+	
 }

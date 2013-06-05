@@ -1,6 +1,7 @@
 package fr.vaevictis.vvcdb;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,22 +15,34 @@ import com.massivecraft.factions.FPlayers;
 public class VVCdB extends JavaPlugin
 {
 	private VVCdBListener listener;
+	
 	@Override
 	public void onEnable()
 	{
 		ChampDeBataille.usedCdB = "";
 		ChampDeBataille.cdbstarted = false;
+		
 		FileConfiguration config = this.getConfig();
-		for (ChampDeBataille cdb : ChampDeBataille.champsdebataille.values())
+		for (int nbchampsdebataille = 0 ; nbchampsdebataille < config.getInt("champsdebataille") ; nbchampsdebataille++)
 		{
-			config.set("champsdebataille."+cdb.getNom(), cdb);
+			ChampDeBataille cdb = new ChampDeBataille(config.getString("champsdebataille." + String.valueOf(nbchampsdebataille)));
+			cdb.setDefaultSpawn(new Location(Bukkit.getServer().getWorld(config.getString("champsdebataille." + String.valueOf(nbchampsdebataille) + ".defaultspawn.world")), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".defaultspawn.X"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".defaultspawn.Y"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".defaultspawn.Z")));
+			for (int nbpositions = 0 ; nbpositions < config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions") ; nbpositions++)
+			{
+				cdb.getPositions().add(new Position(new Location(Bukkit.getServer().getWorld(config.getString("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions) + ".location.world")), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions) + ".location.X"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions) + ".location.Y"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions) + ".location.Z")), config.getBoolean("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions) + ".couverte"), config.getString("champsdebataille." + String.valueOf(nbchampsdebataille) + ".positions." + String.valueOf(nbpositions)), cdb));
+			}
+			for (int nbspawns = 0 ; nbspawns < config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".spawns") ; nbspawns++)
+			{
+				cdb.getSpawns().add(new Location(Bukkit.getServer().getWorld(config.getString("champsdebataille." + String.valueOf(nbchampsdebataille) + ".spawns." + String.valueOf(nbspawns) + ".world")), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".spawns." + String.valueOf(nbspawns) + ".X"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".spawns." + String.valueOf(nbspawns) + ".Y"), config.getInt("champsdebataille." + String.valueOf(nbchampsdebataille) + ".spawns." + String.valueOf(nbspawns) + ".Z")));
+			}
 		}
+		
 	}
-	
 	@Override
 	public void onDisable()
 	{
-		// Sauvegarde
+		ChampDeBataille.saveAll(this);
+		this.saveConfig();
 	}
 	
 	public static String getArmure(Player p)
@@ -207,10 +220,13 @@ public class VVCdB extends JavaPlugin
 		}
 		else if (label.equalsIgnoreCase("cdbleave") && args.length == 0 && p.hasPermission("vvcdb.basic"))
 		{
-			ChampDeBataille.getMap(ChampDeBataille.usedCdB).playerLeave(p);
-			if (ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs().isEmpty())
+			if (ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs().contains(p))
 			{
-				ChampDeBataille.arret();
+				ChampDeBataille.getMap(ChampDeBataille.usedCdB).playerLeave(p);
+				if (ChampDeBataille.getMap(ChampDeBataille.usedCdB).getJoueurs().isEmpty())
+				{
+					ChampDeBataille.arret();
+				}
 			}
 			return true;
 		}
