@@ -20,6 +20,12 @@ public class ChampDeBataille
 	{
 		this.nom = nom.toLowerCase();
 		this.pointsToGet = 50;
+		this.joueurs = new ArrayList<Player>();
+		this.playerwholeft = new ArrayList<Player>();
+		this.inventairesjoueurs = new ArrayList<PlayerInventory>();
+		this.locationsjoueurs = new ArrayList<Location>();
+		this.positions = new ArrayList<Position>();
+		this.spawns = new ArrayList<Location>();
 	}
 	public void ajouterMap()
 	{
@@ -31,7 +37,7 @@ public class ChampDeBataille
 	}
 	public static ChampDeBataille getMap(String key)
 	{
-		return getMap(key);
+		return champsdebataille.get(key);
 	}
 	
 	public String getNom()

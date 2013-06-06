@@ -1,5 +1,7 @@
 package fr.vaevictis.vvcdb;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -19,7 +21,8 @@ public class VVCdB extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		ChampDeBataille.usedCdB = "";
+		ChampDeBataille.champsdebataille = new HashMap<String, ChampDeBataille>();
+		ChampDeBataille.usedCdB = new String("");
 		ChampDeBataille.cdbstarted = false;
 		
 		FileConfiguration config = this.getConfig();
