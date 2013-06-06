@@ -19,7 +19,6 @@ public class ChampDeBataille
 	public ChampDeBataille(String nom)
 	{
 		this.nom = nom.toLowerCase();
-		this.ajouterMap();
 		this.pointsToGet = 50;
 	}
 	public void ajouterMap()

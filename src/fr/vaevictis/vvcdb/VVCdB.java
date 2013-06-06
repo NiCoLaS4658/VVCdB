@@ -200,7 +200,7 @@ public class VVCdB extends JavaPlugin
 		}
 		else if (label.equalsIgnoreCase("cdbcreate") && args.length == 1 && p.hasPermission("vvcdb.admin"))
 		{
-			new ChampDeBataille(args[0]);
+			new ChampDeBataille(args[0]).ajouterMap();
 			return true;
 		}
 		else if (label.equalsIgnoreCase("cdbaddposition") && args.length == 3 && p.hasPermission("vvcdb.admin"))
